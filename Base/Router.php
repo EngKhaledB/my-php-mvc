@@ -29,7 +29,6 @@ class Router
 
 
         $this->segments = explode('/', $this->path);
-
         $this->controller = $this->getController();
         $this->method = $this->getMethod();
     }
@@ -39,11 +38,16 @@ class Router
         return $this->path;
     }
 
+    /**
+     * 0-index based get the segment value
+     * @param int $segmentNo
+     * @return string
+     */
     function getSegment($segmentNo = -1)
     {
         $segmentNo = intval($segmentNo);
-        if ($segmentNo >= 0 && count($this->segments) > $segmentNo) {
-            return $this->segments[$segmentNo];
+        if ($segmentNo > 0 && count($this->segments) >= $segmentNo) {
+            return $this->segments[$segmentNo-1];
         }
 
         return '';
@@ -51,12 +55,12 @@ class Router
 
     function getController()
     {
-        return $this->getSegment(0);
+        return $this->getSegment(1);
     }
 
     function getMethod()
     {
-        return $this->getSegment(1);
+        return $this->getSegment(2);
     }
 
 }

@@ -18,11 +18,11 @@ class Response
             return $html;
     }
 
-    public static function json($data, $output = true)
+    public static function json($data, $status = 200)
     {
-        if ($output)
-            echo json_encode($data);
-        else
-            return json_encode($data);
+        header('Content-Type: application/json');
+        http_response_code($status);
+        echo json_encode($data);
+        die;
     }
 }

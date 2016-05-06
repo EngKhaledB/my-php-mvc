@@ -2,13 +2,16 @@
 
 namespace Helpers;
 
-require_once(ABSPATH . '/config.php');
-
 class Config
 {
+    private static $config;
     public static function  get($key = '')
     {
-        global $config;
-        return ($key !== '' && isset($config[$key])) ? $config[$key] : '';
+        if(self::$config == null){
+            require_once(ABSPATH . '/config.php');
+            global $config;
+            self::$config = $config;
+        }
+        return ($key !== '' && isset(self::$config[$key])) ? self::$config[$key] : '';
     }
 }

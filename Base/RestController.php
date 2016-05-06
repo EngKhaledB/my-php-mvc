@@ -2,14 +2,19 @@
 
 namespace Base;
 
-class RestController
+class RestController extends Controller
 {
-
-    /*
-     * Check the Request Verb and call the suitable function to the verb
-     */
-    public function __call($strMethod, $arrParams)
+    public function __construct()
     {
-        var_dump($_SERVER);
+        parent::__construct();
+        $methods = array('POST','PUT','GET','DELETE');
+        $request_method = $_SERVER['REQUEST_METHOD'];
+
+        if(in_array($request_method,$methods)){
+            $request_method = strtolower($request_method);
+            $this->$request_method();
+        }else{
+            Response::json($_SERVER);
+        }
     }
 }
