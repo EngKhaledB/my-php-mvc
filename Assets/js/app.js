@@ -12,7 +12,6 @@ app.factory('ContactsApi', ['$http', function ($http) {
             return $http.post(base_url + 'contacts/', data);
         },
         updateContact: function (data) {
-            console.log(data);
             return $http.put(base_url + 'contacts/', data);
         }
     }
@@ -43,6 +42,11 @@ app.controller('ContactsCtrl', function ($scope, $http, ContactsApi) {
                     $scope.contacts.push(data);
                     $scope.cancelFn();
                     alert('Contact Created!');
+                }).error(function (data, status) {
+                    if(status == 409)
+                        alert('Mobile Number Exists Before!');
+                    else
+                        alert('Request Invalid!');
                 });
             } else {
                 ContactsApi.updateContact(frmData).success(function (data) {
@@ -50,6 +54,11 @@ app.controller('ContactsCtrl', function ($scope, $http, ContactsApi) {
                     $scope.contacts[$scope.currentEditingIndex] = data;
                     $scope.cancelFn();
                     alert('Contact Updated!');
+                }).error(function (data, status) {
+                    if(status == 404)
+                        alert('Contact Not found!');
+                    else
+                        alert('Request Invalid!');
                 });
             }
         } else {
@@ -63,6 +72,11 @@ app.controller('ContactsCtrl', function ($scope, $http, ContactsApi) {
         ContactsApi.deleteContact(mobileNo).success(function (data) {
             $scope.contacts.splice(index, 1);
             alert('Contact Deleted!');
+        }).error(function (data, status) {
+            if(status == 404)
+                alert('Contact Not found!');
+            else
+                alert('Request Invalid!');
         });
     };
     $scope.editFn = function (index) {
@@ -74,7 +88,7 @@ app.controller('ContactsCtrl', function ($scope, $http, ContactsApi) {
         $scope.disabledMobileNo = true;
         $scope.currentEditingIndex = index;
     };
-    $scope.cancelFn = function() {
+    $scope.cancelFn = function () {
         $scope.formData = {};
         $scope.action = 'post';
         $scope.disabledMobileNo = false;
