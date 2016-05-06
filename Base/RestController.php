@@ -14,7 +14,7 @@ class RestController extends Controller
             $request_method = strtolower($request_method);
             $this->$request_method();
         }else{
-            Response::json($_SERVER);
+            Response::json(array(),500);
         }
     }
 }
